@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ThanhHau Electronics — SmartHome & SmartLight</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#1A56DB;--blue-dark:#1043B0;--blue-light:#EBF2FF;--dark:#0B0F1A;--gray:#6B7280;--light:#F3F6FC;--white:#fff;--border:rgba(26,86,219,0.12);--radius:12px;--radius-sm:8px;--shadow:0 4px 24px rgba(26,86,219,0.10);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Be Vietnam Pro',sans-serif;background:var(--white);color:var(--dark);}
+a{text-decoration:none;color:inherit;}
+img{max-width:100%;display:block;}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+.header-top{background:var(--blue);text-align:center;padding:0.4rem;font-size:0.78rem;color:rgba(255,255,255,0.9);}
+.header-top a{color:#7DD3FA;}
+.nav-wrap{display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:64px;gap:1rem;}
+.logo{font-size:1.3rem;font-weight:800;color:var(--dark);}
+.logo span{color:var(--blue);}
+nav{display:flex;gap:0.25rem;}
+nav a{font-size:0.85rem;font-weight:500;color:var(--gray);padding:0.45rem 0.85rem;border-radius:var(--radius-sm);transition:all .2s;}
+nav a:hover{color:var(--blue);background:var(--blue-light);}
+.nav-right{display:flex;align-items:center;gap:0.75rem;}
+.btn-primary{background:var(--blue);color:var(--white);padding:0.55rem 1.25rem;border-radius:var(--radius-sm);font-weight:600;font-size:0.85rem;border:none;cursor:pointer;font-family:inherit;transition:background .2s;display:inline-flex;align-items:center;gap:0.4rem;}
+.btn-primary:hover{background:var(--blue-dark);}
+.cart-btn{position:relative;background:var(--light);border:none;cursor:pointer;width:40px;height:40px;border-radius:var(--radius-sm);font-size:1.1rem;display:flex;align-items:center;justify-content:center;}
+.cart-badge{position:absolute;top:-4px;right:-4px;background:var(--blue);color:var(--white);width:18px;height:18px;border-radius:50%;font-size:0.65rem;font-weight:700;display:flex;align-items:center;justify-content:center;}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--dark) 0%,#111827 40%,#0D2456 100%);padding:5rem 5%;min-height:440px;display:flex;align-items:center;}
+.hero-content{max-width:600px;}
+.hero-badge{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.25);color:#00D4FF;padding:0.35rem 1rem;border-radius:50px;font-size:0.78rem;font-weight:600;margin-bottom:1.5rem;}
+.hero h1{font-size:clamp(2rem,4vw,3rem);font-weight:800;color:var(--white);line-height:1.15;margin-bottom:1rem;}
+.hero h1 .hl{background:linear-gradient(90deg,#3B6EE5,#00D4FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero p{color:rgba(255,255,255,0.65);font-size:1rem;line-height:1.7;margin-bottom:2rem;}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap;}
+.btn-outline{background:transparent;color:var(--white);padding:0.55rem 1.25rem;border-radius:var(--radius-sm);font-weight:600;font-size:0.85rem;border:1.5px solid rgba(255,255,255,0.3);cursor:pointer;font-family:inherit;transition:all .2s;}
+.btn-outline:hover{background:rgba(255,255,255,0.1);}
+
+/* SECTIONS */
+.section{padding:4rem 5%;}
+.bg-gray{background:var(--light);}
+.section-label{font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--blue);font-weight:600;margin-bottom:0.4rem;}
+.section-title{font-size:1.8rem;font-weight:800;margin-bottom:1.5rem;}
+.section-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem;}
+.see-all{font-size:0.85rem;color:var(--blue);font-weight:500;}
+
+/* CATEGORY GRID */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;}
+.cat-card{border-radius:var(--radius);padding:1.5rem 1rem;text-align:center;cursor:pointer;transition:transform .25s;border:1px solid var(--border);background:var(--white);display:block;}
+.cat-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:rgba(26,86,219,0.3);}
+.cat-icon{font-size:2.2rem;margin-bottom:0.75rem;}
+.cat-name{font-size:0.9rem;font-weight:700;margin-bottom:0.25rem;}
+.cat-count{font-size:0.78rem;color:var(--gray);}
+
+/* PRODUCT GRID */
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.25rem;}
+.prod-card{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:all .25s;background:var(--white);}
+.prod-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:rgba(26,86,219,0.25);}
+.prod-img{aspect-ratio:4/3;background:var(--light);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:3.5rem;}
+.badge{position:absolute;top:0.65rem;left:0.65rem;padding:0.2rem 0.6rem;border-radius:4px;font-size:0.7rem;font-weight:700;}
+.badge-sale{background:#EF4444;color:var(--white);}
+.badge-new{background:var(--blue);color:var(--white);}
+.add-btn{position:absolute;bottom:0;left:0;right:0;background:var(--blue);color:var(--white);border:none;padding:0.65rem;font-size:0.82rem;font-weight:600;cursor:pointer;opacity:0;transition:opacity .25s;font-family:inherit;width:100%;}
+.prod-card:hover .add-btn{opacity:1;}
+.prod-info{padding:1rem;}
+.prod-cat{font-size:0.7rem;color:var(--blue);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.25rem;}
+.prod-name{font-size:0.9rem;font-weight:700;margin-bottom:0.35rem;line-height:1.35;}
+.prod-desc{font-size:0.78rem;color:var(--gray);line-height:1.5;margin-bottom:0.6rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.prod-price-row{display:flex;align-items:center;gap:0.5rem;}
+.prod-price{font-size:1rem;font-weight:800;color:var(--blue);}
+.prod-orig{font-size:0.8rem;color:var(--gray);text-decoration:line-through;}
+
+/* WHY US */
+.why-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.25rem;}
+.why-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;}
+.why-icon{font-size:2rem;margin-bottom:0.75rem;}
+.why-card h4{font-size:0.95rem;font-weight:700;margin-bottom:0.4rem;}
+.why-card p{font-size:0.82rem;color:var(--gray);line-height:1.6;}
+
+/* FOOTER */
+footer{background:var(--dark);padding:3rem 5% 1.5rem;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:2rem;margin-bottom:2rem;}
+.footer-logo{font-size:1.2rem;font-weight:800;color:var(--white);margin-bottom:0.75rem;}
+.footer-logo span{color:var(--blue);}
+.footer-desc{font-size:0.83rem;color:rgba(255,255,255,0.4);line-height:1.7;}
+.footer-col h4{font-size:0.8rem;font-weight:700;color:var(--white);margin-bottom:1rem;letter-spacing:0.04em;}
+.footer-col a{display:block;font-size:0.83rem;color:rgba(255,255,255,0.4);margin-bottom:0.5rem;transition:color .2s;}
+.footer-col a:hover{color:rgba(255,255,255,0.8);}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.07);padding-top:1.25rem;display:flex;justify-content:space-between;font-size:0.78rem;color:rgba(255,255,255,0.3);}
+
+/* CART PANEL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s;}
+.overlay.open{opacity:1;pointer-events:all;}
+.cart-panel{position:fixed;right:0;top:0;bottom:0;width:400px;background:var(--white);z-index:201;transform:translateX(100%);transition:transform .35s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,0.15);}
+.cart-panel.open{transform:translateX(0);}
+.cart-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.cart-header h3{font-size:1.1rem;font-weight:800;}
+.cart-header button{background:var(--light);border:none;cursor:pointer;width:32px;height:32px;border-radius:var(--radius-sm);font-size:1rem;}
+.cart-body{flex:1;overflow-y:auto;padding:1rem 1.5rem;}
+.cart-item{display:flex;gap:0.75rem;padding:0.85rem 0;border-bottom:1px solid var(--light);}
+.cart-item-img{width:60px;height:60px;background:var(--light);border-radius:var(--radius-sm);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.8rem;}
+.cart-item-info{flex:1;}
+.cart-item-cat{font-size:0.7rem;color:var(--blue);font-weight:600;text-transform:uppercase;}
+.cart-item-name{font-size:0.88rem;font-weight:700;margin:0.1rem 0 0.3rem;}
+.cart-item-price{font-size:0.88rem;font-weight:700;color:var(--blue);}
+.qty-row{display:flex;align-items:center;gap:0.4rem;margin-top:0.3rem;}
+.qty-row button{width:24px;height:24px;border:1px solid var(--border);border-radius:4px;background:none;cursor:pointer;font-size:0.9rem;}
+.qty-row span{font-size:0.85rem;font-weight:600;min-width:20px;text-align:center;}
+.cart-remove{background:none;border:none;cursor:pointer;color:var(--gray);font-size:1rem;align-self:flex-start;}
+.cart-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);}
+.cart-total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+.cart-total-row span:last-child{font-size:1.1rem;font-weight:800;color:var(--blue);}
+.btn-zalo{background:#059BFF;color:var(--white);width:100%;text-align:center;padding:0.75rem;border-radius:var(--radius-sm);font-weight:600;font-size:0.88rem;margin-top:0.5rem;display:block;}
+.empty-cart{text-align:center;padding:2rem 0;color:var(--gray);font-style:italic;}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--dark);color:var(--white);padding:0.75rem 1.5rem;border-radius:var(--radius-sm);font-size:0.88rem;font-weight:500;z-index:300;pointer-events:none;white-space:nowrap;transition:transform .35s cubic-bezier(0.34,1.56,0.64,1);}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+/* ZALO FLOAT */
+.zalo-float{position:fixed;bottom:2rem;right:2rem;z-index:150;width:52px;height:52px;border-radius:50%;background:#059BFF;display:flex;align-items:center;justify-content:center;font-size:1.5rem;box-shadow:0 4px 20px rgba(5,155,255,0.45);animation:floatPulse 2s infinite;}
+@keyframes floatPulse{0%,100%{box-shadow:0 4px 20px rgba(5,155,255,0.4);}50%{box-shadow:0 4px 30px rgba(5,155,255,0.65);}}
+
+.loading-msg{grid-column:1/-1;text-align:center;padding:3rem;color:var(--gray);}
+.error-msg{grid-column:1/-1;text-align:center;padding:2rem;color:#EF4444;font-size:0.9rem;}
+
+@media(max-width:768px){nav{display:none;}.cart-panel{width:100%;}.footer-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-top">
+    🚚 Miễn phí vận chuyển đơn từ 500.000₫ &nbsp;|&nbsp; Tư vấn 24/7 &nbsp;|&nbsp;
+    <a href="tel:0338937472">Hotline: 0338 937 472</a>
+  </div>
+  <div class="nav-wrap">
+    <a href="index.html" class="logo">ThanhHau<span>.</span></a>
+    <nav>
+      <a href="pages/products.html">Sản phẩm</a>
+      <a href="pages/products.html?cat=SmartHome">SmartHome</a>
+      <a href="pages/products.html?cat=Camera">Camera</a>
+      <a href="pages/products.html?cat=Đèn NLMT">Đèn NLMT</a>
+    </nav>
+    <div class="nav-right">
+      <a href="https://zalo.me/0338937472" target="_blank" class="btn-primary">💬 Zalo tư vấn</a>
+      <button class="cart-btn" onclick="openCart()">
+        🛒 <span class="cart-badge" id="cartBadge">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">✦ Nhà phân phối chính hãng</div>
+    <h1>Giải pháp <span class="hl">SmartHome</span><br>toàn diện cho mọi không gian</h1>
+    <p>ThanhHau Electronics cung cấp hệ sinh thái SmartHome, SmartLight, SmartFarm và thiết bị điện tử chính hãng.</p>
+    <div class="hero-actions">
+      <a href="pages/products.html" class="btn-primary">🛍️ Mua sắm ngay</a>
+      <a href="https://zalo.me/0338937472" target="_blank" class="btn-outline">📞 Tư vấn miễn phí</a>
+    </div>
+  </div>
+</section>
+
+<!-- DANH MỤC -->
+<section class="section">
+  <p class="section-label">Danh mục sản phẩm</p>
+  <h2 class="section-title">Khám phá hệ sinh thái thông minh</h2>
+  <div class="cat-grid" id="catGrid">
+    <div class="loading-msg">Đang tải danh mục...</div>
+  </div>
+</section>
+
+<!-- SẢN PHẨM NỔI BẬT -->
+<section class="section bg-gray">
+  <div class="section-header">
+    <div>
+      <p class="section-label">Sản phẩm</p>
+      <h2 class="section-title" style="margin-bottom:0">Nổi bật & Khuyến mãi</h2>
+    </div>
+    <a href="pages/products.html" class="see-all">Xem tất cả →</a>
+  </div>
+  <div class="prod-grid" id="featuredGrid">
+    <div class="loading-msg">Đang tải sản phẩm...</div>
+  </div>
+</section>
+
+<!-- VÌ SAO CHỌN -->
+<section class="section">
+  <p class="section-label">Vì sao chọn chúng tôi</p>
+  <h2 class="section-title">Cam kết chất lượng</h2>
+  <div class="why-grid">
+    <div class="why-card"><div class="why-icon">🏆</div><h4>Sản phẩm chính hãng</h4><p>100% hàng chính hãng, tem bảo hành và chứng nhận xuất xứ rõ ràng</p></div>
+    <div class="why-card"><div class="why-icon">🔧</div><h4>Lắp đặt tận nơi</h4><p>Đội kỹ thuật viên chuyên nghiệp lắp đặt và hướng dẫn sử dụng tại nhà</p></div>
+    <div class="why-card"><div class="why-icon">🛡️</div><h4>Bảo hành 12–36 tháng</h4><p>Hỗ trợ kỹ thuật từ xa 24/7 qua Zalo & điện thoại</p></div>
+    <div class="why-card"><div class="why-icon">💳</div><h4>Thanh toán linh hoạt</h4><p>Tiền mặt, chuyển khoản, COD và trả góp 0% lãi suất</p></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">ThanhHau<span>.</span></div>
+      <p class="footer-desc">Nhà phân phối thiết bị SmartHome, SmartLight, SmartFarm và điện tử chính hãng.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Sản phẩm</h4>
+      <a href="pages/products.html?cat=SmartHome">SmartHome</a>
+      <a href="pages/products.html?cat=SmartLight">SmartLight</a>
+      <a href="pages/products.html?cat=SmartFarm">SmartFarm</a>
+      <a href="pages/products.html?cat=Camera">Camera</a>
+      <a href="pages/products.html?cat=Đèn NLMT">Đèn NLMT</a>
+    </div>
+    <div class="footer-col">
+      <h4>Liên hệ</h4>
+      <a href="tel:0338937472">📞 0338 937 472</a>
+      <a href="https://zalo.me/0338937472" target="_blank">💬 Zalo: 0338 937 472</a>
+      <a href="mailto:hothanhhau.work@gmail.com">📧 hothanhhau.work@gmail.com</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 ThanhHau Electronics</span>
+  </div>
+</footer>
+
+<!-- CART -->
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <h3>🛒 Giỏ hàng</h3>
+    <button onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-body" id="cartBody"><div class="empty-cart">Giỏ hàng trống</div></div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-total-row"><span>Tổng cộng</span><span id="cartTotal"></span></div>
+    <button class="btn-primary" style="width:100%;justify-content:center" onclick="alert('Tính năng đặt hàng đang phát triển!')">Đặt hàng ngay</button>
+    <a href="https://zalo.me/0338937472" target="_blank" class="btn-zalo">💬 Đặt qua Zalo — 0338 937 472</a>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<a href="https://zalo.me/0338937472" class="zalo-float" target="_blank">💬</a>
+
+<script>
+// ── CONFIG ──────────────────────────────────
+const CONFIG = {
+  spreadsheetId: "1SBGDF2y9FEjmub_Us7aqmtXqOCtg6V_e-j1AXOlXwV0",
+  apiKey: "AIzaSyA5xbRhPZIVwp_U47kvznVsiry-QG228OM",
+  sheetNames: ["SmartHome", "SmartLight", "SmartFarm", "Camera", "Đèn NLMT"],
+  imagePath: "assets/images/products/",
+};
+
+const CAT_ICONS = {"SmartHome":"🏠","SmartLight":"💡","SmartFarm":"🌿","Camera":"📷","Đèn NLMT":"☀️"};
+
+// ── LOAD PRODUCTS FROM GOOGLE SHEETS ────────
+async function loadProducts() {
+  const all = [];
+  for (const sheet of CONFIG.sheetNames) {
+    try {
+      const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.spreadsheetId}/values/${encodeURIComponent(sheet)}!A4:H500?key=${CONFIG.apiKey}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.error) { console.warn(sheet, data.error.message); continue; }
+      if (!data.values) continue;
+      data.values.forEach(row => {
+        if (!row[0] || !row[1] || !row[2]) return;
+        all.push({
+          bigCat: sheet, category: row[0]||"", id: row[1]||"", name: row[2]||"",
+          price: parseInt((row[3]||"0").toString().replace(/\D/g,""))||0,
+          origPrice: parseInt((row[4]||"0").toString().replace(/\D/g,""))||0,
+          desc: row[5]||"", image: row[6]||"", status: (row[7]||"active").trim()
+        });
+      });
+    } catch(e) { console.warn("Lỗi tải sheet:", sheet, e); }
+  }
+  return all.filter(p => p.status !== "inactive");
+}
+
+function fmt(n) { return n ? n.toLocaleString("vi-VN")+"₫" : ""; }
+
+// ── RENDER CATEGORIES ────────────────────────
+function renderCategories(products) {
+  const counts = {};
+  products.forEach(p => counts[p.bigCat] = (counts[p.bigCat]||0)+1);
+  const html = CONFIG.sheetNames.map(cat => `
+    <a href="pages/products.html?cat=${encodeURIComponent(cat)}" class="cat-card">
+      <div class="cat-icon">${CAT_ICONS[cat]||"📦"}</div>
+      <div class="cat-name">${cat}</div>
+      <div class="cat-count">${counts[cat]||0} sản phẩm</div>
+    </a>`).join("");
+  document.getElementById("catGrid").innerHTML = html;
+}
+
+// ── RENDER FEATURED PRODUCTS ─────────────────
+function renderFeatured(products) {
+  const featured = [...products.filter(p=>p.status==="sale"), ...products.filter(p=>p.status!=="sale")].slice(0,8);
+  if (!featured.length) {
+    document.getElementById("featuredGrid").innerHTML = '<div class="error-msg">Chưa có sản phẩm nào. Hãy thêm vào Google Sheets!</div>';
+    return;
+  }
+  document.getElementById("featuredGrid").innerHTML = featured.map(p => {
+    const isSale = p.status==="sale" && p.origPrice>0;
+    const disc = isSale ? Math.round((1-p.price/p.origPrice)*100) : 0;
+    const imgContent = p.image
+      ? `<img src="${CONFIG.imagePath}${p.image}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`
+      : (CAT_ICONS[p.bigCat]||"📦");
+    return `
+      <div class="prod-card">
+        <div class="prod-img">
+          ${imgContent}
+          ${isSale?`<span class="badge badge-sale">-${disc}%</span>`:""}
+          <button class="add-btn" onclick='addToCart(${JSON.stringify({id:p.id,name:p.name,price:p.price,bigCat:p.bigCat,category:p.category,image:p.image})})'>+ Thêm vào giỏ</button>
+        </div>
+        <div class="prod-info">
+          <p class="prod-cat">${p.bigCat} / ${p.category}</p>
+          <p class="prod-name">${p.name}</p>
+          <p class="prod-desc">${p.desc}</p>
+          <div class="prod-price-row">
+            <span class="prod-price">${fmt(p.price)}</span>
+            ${isSale?`<span class="prod-orig">${fmt(p.origPrice)}</span>`:""}
+          </div>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+// ── CART ─────────────────────────────────────
+let cart = JSON.parse(localStorage.getItem("th_cart")||"[]");
+
+function saveCart() {
+  localStorage.setItem("th_cart", JSON.stringify(cart));
+  document.querySelectorAll("#cartBadge").forEach(b => b.textContent = cart.reduce((s,i)=>s+i.qty,0));
+}
+
+function addToCart(p) {
+  const ex = cart.find(i=>i.id===p.id);
+  if (ex) ex.qty++; else cart.push({...p,qty:1});
+  saveCart(); renderCartPanel();
+  showToast(`✅ Đã thêm "${p.name}"`);
+}
+
+function removeFromCart(id) { cart=cart.filter(i=>i.id!==id); saveCart(); renderCartPanel(); }
+function changeQty(id,d) { const i=cart.find(x=>x.id===id); if(i){i.qty+=d; if(i.qty<=0)removeFromCart(id); else{saveCart();renderCartPanel();}} }
+
+function renderCartPanel() {
+  const body=document.getElementById("cartBody");
+  const footer=document.getElementById("cartFooter");
+  if(!cart.length){body.innerHTML='<div class="empty-cart">Giỏ hàng trống</div>';footer.style.display="none";return;}
+  body.innerHTML=cart.map(i=>`
+    <div class="cart-item">
+      <div class="cart-item-img">${CAT_ICONS[i.bigCat]||"📦"}</div>
+      <div class="cart-item-info">
+        <p class="cart-item-cat">${i.bigCat}</p>
+        <p class="cart-item-name">${i.name}</p>
+        <p class="cart-item-price">${fmt(i.price)}</p>
+        <div class="qty-row">
+          <button onclick="changeQty('${i.id}',-1)">−</button>
+          <span>${i.qty}</span>
+          <button onclick="changeQty('${i.id}',1)">+</button>
+        </div>
+      </div>
+      <button class="cart-remove" onclick="removeFromCart('${i.id}')">✕</button>
+    </div>`).join("");
+  footer.style.display="block";
+  document.getElementById("cartTotal").textContent=fmt(cart.reduce((s,i)=>s+i.price*i.qty,0));
+}
+
+function openCart(){document.getElementById("overlay").classList.add("open");document.getElementById("cartPanel").classList.add("open");renderCartPanel();}
+function closeCart(){document.getElementById("overlay").classList.remove("open");document.getElementById("cartPanel").classList.remove("open");}
+
+function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2800);}
+
+// ── INIT ──────────────────────────────────────
+(async()=>{
+  saveCart();
+  try {
+    const products = await loadProducts();
+    if(products.length===0){
+      document.getElementById("catGrid").innerHTML='<div class="error-msg">⚠️ Chưa có dữ liệu. Kiểm tra Google Sheets đã share công khai chưa?</div>';
+      document.getElementById("featuredGrid").innerHTML='<div class="error-msg">⚠️ Chưa có sản phẩm</div>';
+    } else {
+      renderCategories(products);
+      renderFeatured(products);
+    }
+  } catch(e) {
+    document.getElementById("catGrid").innerHTML=`<div class="error-msg">⚠️ Lỗi tải dữ liệu: ${e.message}</div>`;
+    console.error(e);
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chi tiết sản phẩm — ThanhHau Electronics</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#1A56DB;--blue-dark:#1043B0;--blue-light:#EBF2FF;--dark:#0B0F1A;--gray:#6B7280;--light:#F3F6FC;--white:#fff;--border:rgba(26,86,219,0.12);--radius:12px;--radius-sm:8px;--shadow:0 4px 24px rgba(26,86,219,0.10);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Be Vietnam Pro',sans-serif;background:var(--white);color:var(--dark);}
+a{text-decoration:none;color:inherit;}
+img{max-width:100%;display:block;}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+.header-top{background:var(--blue);text-align:center;padding:0.4rem;font-size:0.78rem;color:rgba(255,255,255,0.9);}
+.header-top a{color:#7DD3FA;}
+.nav-wrap{display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:64px;gap:1rem;}
+.logo{font-size:1.3rem;font-weight:800;color:var(--dark);}
+.logo span{color:var(--blue);}
+nav{display:flex;gap:0.25rem;}
+nav a{font-size:0.85rem;font-weight:500;color:var(--gray);padding:0.45rem 0.85rem;border-radius:var(--radius-sm);transition:all .2s;}
+nav a:hover{color:var(--blue);background:var(--blue-light);}
+.nav-right{display:flex;align-items:center;gap:0.75rem;}
+.btn-primary{background:var(--blue);color:var(--white);padding:0.55rem 1.25rem;border-radius:var(--radius-sm);font-weight:600;font-size:0.85rem;border:none;cursor:pointer;font-family:inherit;transition:background .2s;display:inline-flex;align-items:center;gap:0.4rem;}
+.btn-primary:hover{background:var(--blue-dark);}
+.cart-btn{position:relative;background:var(--light);border:none;cursor:pointer;width:40px;height:40px;border-radius:var(--radius-sm);font-size:1.1rem;display:flex;align-items:center;justify-content:center;}
+.cart-badge{position:absolute;top:-4px;right:-4px;background:var(--blue);color:var(--white);width:18px;height:18px;border-radius:50%;font-size:0.65rem;font-weight:700;display:flex;align-items:center;justify-content:center;}
+
+/* BREADCRUMB */
+.breadcrumb-bar{padding:1rem 5%;font-size:0.82rem;color:var(--gray);border-bottom:1px solid var(--border);}
+.breadcrumb-bar a{color:var(--blue);}
+.breadcrumb-bar span{margin:0 0.4rem;}
+
+/* DETAIL LAYOUT */
+.detail-wrap{display:grid;grid-template-columns:1fr 1fr;gap:3rem;padding:2.5rem 5%;max-width:1200px;margin:0 auto;}
+
+/* PRODUCT IMAGE */
+.product-image-box{position:sticky;top:80px;height:fit-content;}
+.main-image{aspect-ratio:1/1;background:var(--light);border-radius:var(--radius);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:8rem;margin-bottom:1rem;border:1px solid var(--border);}
+.main-image img{width:100%;height:100%;object-fit:cover;}
+.thumb-row{display:flex;gap:0.75rem;}
+.thumb{width:72px;height:72px;border-radius:var(--radius-sm);background:var(--light);border:2px solid transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.5rem;overflow:hidden;}
+.thumb.active{border-color:var(--blue);}
+.thumb img{width:100%;height:100%;object-fit:cover;}
+
+/* PRODUCT INFO */
+.product-info{padding-top:0.5rem;}
+.prod-badge-row{display:flex;gap:0.5rem;margin-bottom:0.75rem;flex-wrap:wrap;}
+.pbadge{padding:0.25rem 0.75rem;border-radius:50px;font-size:0.75rem;font-weight:600;}
+.pbadge-cat{background:var(--blue-light);color:var(--blue);}
+.pbadge-sale{background:#FEE2E2;color:#DC2626;}
+.pbadge-new{background:#DCFCE7;color:#16A34A;}
+.prod-title{font-size:1.6rem;font-weight:800;line-height:1.25;margin-bottom:0.5rem;}
+.prod-id{font-size:0.8rem;color:var(--gray);margin-bottom:1.25rem;}
+.price-box{display:flex;align-items:baseline;gap:0.75rem;margin-bottom:1.5rem;}
+.price-main{font-size:2rem;font-weight:800;color:var(--blue);}
+.price-orig{font-size:1.1rem;color:var(--gray);text-decoration:line-through;}
+.price-discount{background:#EF4444;color:var(--white);font-size:0.78rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:4px;}
+
+/* QTY & ACTIONS */
+.qty-wrap{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;}
+.qty-label{font-size:0.85rem;font-weight:600;color:var(--gray);}
+.qty-control{display:flex;align-items:center;border:1.5px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;}
+.qty-control button{width:40px;height:40px;background:var(--light);border:none;cursor:pointer;font-size:1.1rem;transition:background .2s;}
+.qty-control button:hover{background:var(--blue-light);}
+.qty-control span{width:48px;text-align:center;font-size:0.95rem;font-weight:700;}
+.action-row{display:flex;gap:0.75rem;margin-bottom:1.5rem;}
+.btn-add{flex:1;background:var(--blue);color:var(--white);padding:0.9rem;border-radius:var(--radius-sm);font-weight:700;font-size:0.95rem;border:none;cursor:pointer;font-family:inherit;transition:background .2s;}
+.btn-add:hover{background:var(--blue-dark);}
+.btn-zalo-detail{flex:1;background:#059BFF;color:var(--white);padding:0.9rem;border-radius:var(--radius-sm);font-weight:700;font-size:0.95rem;border:none;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:0.5rem;}
+
+/* DESCRIPTION */
+.desc-box{background:var(--light);border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:1.5rem;}
+.desc-box h4{font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--gray);margin-bottom:0.75rem;}
+.desc-box p{font-size:0.9rem;line-height:1.75;color:var(--dark);}
+
+/* WARRANTY */
+.warranty-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;margin-bottom:1.5rem;}
+.warranty-item{background:var(--light);border-radius:var(--radius-sm);padding:0.85rem;text-align:center;}
+.warranty-item .wi-icon{font-size:1.4rem;margin-bottom:0.35rem;}
+.warranty-item p{font-size:0.75rem;color:var(--gray);line-height:1.4;}
+.warranty-item strong{display:block;font-size:0.82rem;color:var(--dark);}
+
+/* RELATED */
+.related-section{padding:3rem 5%;max-width:1200px;margin:0 auto;}
+.related-section h3{font-size:1.3rem;font-weight:800;margin-bottom:1.5rem;}
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;}
+.prod-card{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:all .25s;background:var(--white);cursor:pointer;}
+.prod-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);}
+.prod-img{aspect-ratio:4/3;background:var(--light);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:3rem;}
+.prod-img img{width:100%;height:100%;object-fit:cover;}
+.badge{position:absolute;top:0.5rem;left:0.5rem;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.68rem;font-weight:700;}
+.badge-sale{background:#EF4444;color:var(--white);}
+.add-btn{position:absolute;bottom:0;left:0;right:0;background:var(--blue);color:var(--white);border:none;padding:0.6rem;font-size:0.8rem;font-weight:600;cursor:pointer;opacity:0;transition:opacity .25s;font-family:inherit;width:100%;}
+.prod-card:hover .add-btn{opacity:1;}
+.prod-info{padding:0.85rem;}
+.prod-cat{font-size:0.68rem;color:var(--blue);font-weight:600;text-transform:uppercase;margin-bottom:0.2rem;}
+.prod-name{font-size:0.85rem;font-weight:700;margin-bottom:0.4rem;line-height:1.3;}
+.prod-price{font-size:0.9rem;font-weight:800;color:var(--blue);}
+
+/* FOOTER */
+footer{background:var(--dark);padding:3rem 5% 1.5rem;margin-top:2rem;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:2rem;margin-bottom:2rem;}
+.footer-logo{font-size:1.2rem;font-weight:800;color:var(--white);margin-bottom:0.75rem;}
+.footer-logo span{color:var(--blue);}
+.footer-desc{font-size:0.83rem;color:rgba(255,255,255,0.4);line-height:1.7;}
+.footer-col h4{font-size:0.8rem;font-weight:700;color:var(--white);margin-bottom:1rem;}
+.footer-col a{display:block;font-size:0.83rem;color:rgba(255,255,255,0.4);margin-bottom:0.5rem;transition:color .2s;}
+.footer-col a:hover{color:rgba(255,255,255,0.8);}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.07);padding-top:1.25rem;display:flex;justify-content:space-between;font-size:0.78rem;color:rgba(255,255,255,0.3);}
+
+/* CART */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s;}
+.overlay.open{opacity:1;pointer-events:all;}
+.cart-panel{position:fixed;right:0;top:0;bottom:0;width:400px;background:var(--white);z-index:201;transform:translateX(100%);transition:transform .35s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,0.15);}
+.cart-panel.open{transform:translateX(0);}
+.cart-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.cart-header h3{font-size:1.1rem;font-weight:800;}
+.cart-header button{background:var(--light);border:none;cursor:pointer;width:32px;height:32px;border-radius:var(--radius-sm);font-size:1rem;}
+.cart-body{flex:1;overflow-y:auto;padding:1rem 1.5rem;}
+.cart-item{display:flex;gap:0.75rem;padding:0.85rem 0;border-bottom:1px solid var(--light);}
+.cart-item-img{width:60px;height:60px;background:var(--light);border-radius:var(--radius-sm);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.8rem;}
+.cart-item-info{flex:1;}
+.cart-item-cat{font-size:0.7rem;color:var(--blue);font-weight:600;text-transform:uppercase;}
+.cart-item-name{font-size:0.88rem;font-weight:700;margin:0.1rem 0 0.3rem;}
+.cart-item-price{font-size:0.88rem;font-weight:700;color:var(--blue);}
+.qty-row{display:flex;align-items:center;gap:0.4rem;margin-top:0.3rem;}
+.qty-row button{width:24px;height:24px;border:1px solid var(--border);border-radius:4px;background:none;cursor:pointer;font-size:0.9rem;}
+.qty-row span{font-size:0.85rem;font-weight:600;min-width:20px;text-align:center;}
+.cart-remove{background:none;border:none;cursor:pointer;color:var(--gray);font-size:1rem;align-self:flex-start;}
+.cart-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);}
+.cart-total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+.cart-total-row span:last-child{font-size:1.1rem;font-weight:800;color:var(--blue);}
+.btn-zalo-cart{background:#059BFF;color:var(--white);width:100%;text-align:center;padding:0.75rem;border-radius:var(--radius-sm);font-weight:600;font-size:0.88rem;margin-top:0.5rem;display:block;}
+.empty-cart{text-align:center;padding:2rem 0;color:var(--gray);font-style:italic;}
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--dark);color:var(--white);padding:0.75rem 1.5rem;border-radius:var(--radius-sm);font-size:0.88rem;font-weight:500;z-index:300;pointer-events:none;white-space:nowrap;transition:transform .35s cubic-bezier(0.34,1.56,0.64,1);}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.zalo-float{position:fixed;bottom:2rem;right:2rem;z-index:150;width:52px;height:52px;border-radius:50%;background:#059BFF;display:flex;align-items:center;justify-content:center;font-size:1.5rem;box-shadow:0 4px 20px rgba(5,155,255,0.45);animation:floatPulse 2s infinite;}
+@keyframes floatPulse{0%,100%{box-shadow:0 4px 20px rgba(5,155,255,0.4);}50%{box-shadow:0 4px 30px rgba(5,155,255,0.65);}}
+.not-found{text-align:center;padding:5rem 2rem;color:var(--gray);}
+.not-found h2{font-size:1.5rem;margin-bottom:1rem;}
+@media(max-width:900px){.detail-wrap{grid-template-columns:1fr;}.product-image-box{position:static;}.warranty-row{grid-template-columns:1fr 1fr;}.footer-grid{grid-template-columns:1fr;}nav{display:none;}.cart-panel{width:100%;}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-top">
+    🚚 Miễn phí vận chuyển đơn từ 500.000₫ &nbsp;|&nbsp; Tư vấn 24/7 &nbsp;|&nbsp;
+    <a href="tel:0338937472">Hotline: 0338 937 472</a>
+  </div>
+  <div class="nav-wrap">
+    <a href="../index.html" class="logo">ThanhHau<span>.</span></a>
+    <nav>
+      <a href="products.html">Sản phẩm</a>
+      <a href="products.html?cat=SmartHome">SmartHome</a>
+      <a href="products.html?cat=Camera">Camera</a>
+      <a href="products.html?cat=Đèn NLMT">Đèn NLMT</a>
+    </nav>
+    <div class="nav-right">
+      <a href="https://zalo.me/0338937472" target="_blank" class="btn-primary">💬 Zalo tư vấn</a>
+      <button class="cart-btn" onclick="openCart()">
+        🛒 <span class="cart-badge" id="cartBadge">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb-bar" id="breadcrumbBar">
+  <a href="../index.html">Trang chủ</a><span>›</span>
+  <a href="products.html">Sản phẩm</a><span>›</span>
+  <span id="breadcrumbName">...</span>
+</div>
+
+<!-- MAIN DETAIL -->
+<div id="detailContent"></div>
+
+<!-- RELATED -->
+<div class="related-section" id="relatedSection" style="display:none">
+  <h3>Sản phẩm liên quan</h3>
+  <div class="prod-grid" id="relatedGrid"></div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">ThanhHau<span>.</span></div>
+      <p class="footer-desc">Nhà phân phối thiết bị SmartHome, SmartLight, SmartFarm và điện tử chính hãng.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Sản phẩm</h4>
+      <a href="products.html?cat=SmartHome">SmartHome</a>
+      <a href="products.html?cat=SmartLight">SmartLight</a>
+      <a href="products.html?cat=SmartFarm">SmartFarm</a>
+      <a href="products.html?cat=Camera">Camera</a>
+      <a href="products.html?cat=Đèn NLMT">Đèn NLMT</a>
+    </div>
+    <div class="footer-col">
+      <h4>Liên hệ</h4>
+      <a href="tel:0338937472">📞 0338 937 472</a>
+      <a href="https://zalo.me/0338937472" target="_blank">💬 Zalo: 0338 937 472</a>
+      <a href="mailto:hothanhhau.work@gmail.com">📧 hothanhhau.work@gmail.com</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 ThanhHau Electronics</span>
+  </div>
+</footer>
+
+<!-- CART -->
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-header"><h3>🛒 Giỏ hàng</h3><button onclick="closeCart()">✕</button></div>
+  <div class="cart-body" id="cartBody"><div class="empty-cart">Giỏ hàng trống</div></div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-total-row"><span>Tổng cộng</span><span id="cartTotal"></span></div>
+    <button class="btn-primary" style="width:100%;justify-content:center" onclick="alert('Tính năng đặt hàng đang phát triển!')">Đặt hàng ngay</button>
+    <a href="https://zalo.me/0338937472" target="_blank" class="btn-zalo-cart">💬 Đặt qua Zalo</a>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<a href="https://zalo.me/0338937472" class="zalo-float" target="_blank">💬</a>
+
+<script>
+const CONFIG = {
+  spreadsheetId: "1SBGDF2y9FEjmub_Us7aqmtXqOCtg6V_e-j1AXOlXwV0",
+  apiKey: "AIzaSyA5xbRhPZIVwp_U47kvznVsiry-QG228OM",
+  sheetNames: ["SmartHome", "SmartLight", "SmartFarm", "Camera", "Đèn NLMT"],
+  imagePath: "../assets/images/products/",
+};
+const CAT_ICONS = {"SmartHome":"🏠","SmartLight":"💡","SmartFarm":"🌿","Camera":"📷","Đèn NLMT":"☀️"};
+
+let allProducts = [];
+let qty = 1;
+
+async function loadProducts() {
+  const all = [];
+  for (const sheet of CONFIG.sheetNames) {
+    try {
+      const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.spreadsheetId}/values/${encodeURIComponent(sheet)}!A4:H500?key=${CONFIG.apiKey}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.error || !data.values) continue;
+      data.values.forEach(row => {
+        if (!row[0]||!row[1]||!row[2]) return;
+        all.push({
+          bigCat: sheet, category: row[0]||"", id: row[1]||"", name: row[2]||"",
+          price: parseInt((row[3]||"0").toString().replace(/\D/g,""))||0,
+          origPrice: parseInt((row[4]||"0").toString().replace(/\D/g,""))||0,
+          desc: row[5]||"", image: row[6]||"", status: (row[7]||"active").trim()
+        });
+      });
+    } catch(e) { console.warn("Lỗi sheet:", sheet, e); }
+  }
+  return all.filter(p => p.status !== "inactive");
+}
+
+function fmt(n) { return n ? n.toLocaleString("vi-VN")+"₫" : ""; }
+
+function renderDetail(p) {
+  const isSale = p.status==="sale" && p.origPrice>0;
+  const disc = isSale ? Math.round((1-p.price/p.origPrice)*100) : 0;
+  const imgHtml = p.image
+    ? `<img src="${CONFIG.imagePath}${p.image}" alt="${p.name}" onerror="this.style.display='none';this.parentElement.innerHTML='${CAT_ICONS[p.bigCat]||'📦'}';">`
+    : CAT_ICONS[p.bigCat]||"📦";
+
+  document.getElementById("breadcrumbName").textContent = p.name;
+  document.title = `${p.name} — ThanhHau Electronics`;
+
+  document.getElementById("detailContent").innerHTML = `
+    <div class="detail-wrap">
+      <!-- ẢNH -->
+      <div class="product-image-box">
+        <div class="main-image" id="mainImg">${imgHtml}</div>
+        <div class="thumb-row">
+          <div class="thumb active" onclick="switchImg(this, '${p.image}')">
+            ${p.image ? `<img src="${CONFIG.imagePath}${p.image}" onerror="this.style.display='none'">` : (CAT_ICONS[p.bigCat]||"📦")}
+          </div>
+        </div>
+      </div>
+
+      <!-- THÔNG TIN -->
+      <div class="product-info">
+        <div class="prod-badge-row">
+          <span class="pbadge pbadge-cat">${p.bigCat}</span>
+          <span class="pbadge pbadge-cat" style="background:var(--light)">${p.category}</span>
+          ${isSale ? `<span class="pbadge pbadge-sale">Giảm ${disc}%</span>` : ""}
+        </div>
+
+        <h1 class="prod-title">${p.name}</h1>
+        <p class="prod-id">Mã sản phẩm: <strong>${p.id}</strong></p>
+
+        <div class="price-box">
+          <span class="price-main">${fmt(p.price)}</span>
+          ${isSale ? `<span class="price-orig">${fmt(p.origPrice)}</span>` : ""}
+          ${isSale ? `<span class="price-discount">-${disc}%</span>` : ""}
+        </div>
+
+        <div class="desc-box">
+          <h4>Mô tả sản phẩm</h4>
+          <p>${p.desc || "Vui lòng liên hệ để biết thêm chi tiết."}</p>
+        </div>
+
+        <div class="warranty-row">
+          <div class="warranty-item">
+            <div class="wi-icon">🏆</div>
+            <strong>Chính hãng 100%</strong>
+            <p>Tem bảo hành xuất xứ rõ ràng</p>
+          </div>
+          <div class="warranty-item">
+            <div class="wi-icon">🛡️</div>
+            <strong>Bảo hành 12-36T</strong>
+            <p>Hỗ trợ kỹ thuật 24/7</p>
+          </div>
+          <div class="warranty-item">
+            <div class="wi-icon">🚚</div>
+            <strong>Miễn phí ship</strong>
+            <p>Đơn từ 500.000₫</p>
+          </div>
+        </div>
+
+        <div class="qty-wrap">
+          <span class="qty-label">Số lượng:</span>
+          <div class="qty-control">
+            <button onclick="changeQtyDetail(-1)">−</button>
+            <span id="qtyDisplay">1</span>
+            <button onclick="changeQtyDetail(1)">+</button>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="btn-add" onclick='addToCartDetail()'>🛒 Thêm vào giỏ hàng</button>
+          <a href="https://zalo.me/0338937472" target="_blank" class="btn-zalo-detail">💬 Đặt qua Zalo</a>
+        </div>
+      </div>
+    </div>`;
+
+  // Lưu product hiện tại để dùng khi add to cart
+  window.currentProduct = p;
+}
+
+function switchImg(el, imgFile) {
+  document.querySelectorAll(".thumb").forEach(t => t.classList.remove("active"));
+  el.classList.add("active");
+  const main = document.getElementById("mainImg");
+  if (imgFile) {
+    main.innerHTML = `<img src="${CONFIG.imagePath}${imgFile}" alt="">`;
+  }
+}
+
+function changeQtyDetail(d) {
+  qty = Math.max(1, qty + d);
+  document.getElementById("qtyDisplay").textContent = qty;
+}
+
+function addToCartDetail() {
+  if (!window.currentProduct) return;
+  const p = window.currentProduct;
+  const ex = cart.find(i => i.id === p.id);
+  if (ex) ex.qty += qty; else cart.push({...p, qty});
+  saveCart(); renderCartPanel();
+  showToast(`✅ Đã thêm ${qty} "${p.name}" vào giỏ`);
+}
+
+function renderRelated(products, current) {
+  const related = products.filter(p => p.bigCat === current.bigCat && p.id !== current.id).slice(0, 4);
+  if (!related.length) return;
+  document.getElementById("relatedSection").style.display = "block";
+  document.getElementById("relatedGrid").innerHTML = related.map(p => {
+    const isSale = p.status==="sale" && p.origPrice>0;
+    const disc = isSale ? Math.round((1-p.price/p.origPrice)*100) : 0;
+    return `
+      <div class="prod-card" onclick="location.href='product-detail.html?id=${p.id}'">
+        <div class="prod-img">
+          ${p.image ? `<img src="${CONFIG.imagePath}${p.image}" onerror="this.style.display='none'">` : (CAT_ICONS[p.bigCat]||"📦")}
+          ${isSale ? `<span class="badge badge-sale">-${disc}%</span>` : ""}
+          <button class="add-btn" onclick='event.stopPropagation();addRelated(${JSON.stringify({id:p.id,name:p.name,price:p.price,bigCat:p.bigCat,category:p.category,image:p.image})})'>+ Thêm vào giỏ</button>
+        </div>
+        <div class="prod-info">
+          <p class="prod-cat">${p.category}</p>
+          <p class="prod-name">${p.name}</p>
+          <p class="prod-price">${fmt(p.price)}</p>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+function addRelated(p) {
+  const ex = cart.find(i=>i.id===p.id);
+  if(ex) ex.qty++; else cart.push({...p,qty:1});
+  saveCart(); renderCartPanel();
+  showToast(`✅ Đã thêm "${p.name}"`);
+}
+
+// CART
+let cart = JSON.parse(localStorage.getItem("th_cart")||"[]");
+function saveCart() {
+  localStorage.setItem("th_cart", JSON.stringify(cart));
+  document.querySelectorAll("#cartBadge").forEach(b => b.textContent = cart.reduce((s,i)=>s+i.qty,0));
+}
+function removeFromCart(id) { cart=cart.filter(i=>i.id!==id); saveCart(); renderCartPanel(); }
+function changeQty(id,d) { const i=cart.find(x=>x.id===id); if(i){i.qty+=d; if(i.qty<=0)removeFromCart(id); else{saveCart();renderCartPanel();}} }
+function renderCartPanel() {
+  const body=document.getElementById("cartBody");
+  const footer=document.getElementById("cartFooter");
+  if(!cart.length){body.innerHTML='<div class="empty-cart">Giỏ hàng trống</div>';footer.style.display="none";return;}
+  body.innerHTML=cart.map(i=>`
+    <div class="cart-item">
+      <div class="cart-item-img">${CAT_ICONS[i.bigCat]||"📦"}</div>
+      <div class="cart-item-info">
+        <p class="cart-item-cat">${i.bigCat}</p>
+        <p class="cart-item-name">${i.name}</p>
+        <p class="cart-item-price">${fmt(i.price)}</p>
+        <div class="qty-row">
+          <button onclick="changeQty('${i.id}',-1)">−</button>
+          <span>${i.qty}</span>
+          <button onclick="changeQty('${i.id}',1)">+</button>
+        </div>
+      </div>
+      <button class="cart-remove" onclick="removeFromCart('${i.id}')">✕</button>
+    </div>`).join("");
+  footer.style.display="block";
+  document.getElementById("cartTotal").textContent=fmt(cart.reduce((s,i)=>s+i.price*i.qty,0));
+}
+function openCart(){document.getElementById("overlay").classList.add("open");document.getElementById("cartPanel").classList.add("open");renderCartPanel();}
+function closeCart(){document.getElementById("overlay").classList.remove("open");document.getElementById("cartPanel").classList.remove("open");}
+function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2800);}
+
+// INIT
+(async()=>{
+  saveCart();
+  const id = new URLSearchParams(location.search).get("id");
+  if (!id) {
+    document.getElementById("detailContent").innerHTML = '<div class="not-found"><h2>Không tìm thấy sản phẩm</h2><a href="products.html" class="btn-primary">← Quay lại</a></div>';
+    return;
+  }
+  allProducts = await loadProducts();
+  const product = allProducts.find(p => p.id === id);
+  if (!product) {
+    document.getElementById("detailContent").innerHTML = '<div class="not-found"><h2>Sản phẩm không tồn tại</h2><a href="products.html" class="btn-primary">← Quay lại</a></div>';
+    return;
+  }
+  renderDetail(product);
+  renderRelated(allProducts, product);
+})();
+</script>
+</body>
+</html>
