@@ -128,6 +128,24 @@ footer{background:var(--dark);padding:3rem 5% 1.5rem;}
 .error-msg{grid-column:1/-1;text-align:center;padding:2rem;color:#EF4444;font-size:0.9rem;}
 
 @media(max-width:768px){nav{display:none;}.cart-panel{width:100%;}.footer-grid{grid-template-columns:1fr;}}
+
+/* ORDER MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal-box{background:var(--white);border-radius:var(--radius);width:90%;max-width:460px;max-height:90vh;overflow-y:auto;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,0.3);}
+.modal-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.modal-header h3{font-size:1.1rem;font-weight:800;}
+.modal-header button{background:var(--light);border:none;cursor:pointer;width:32px;height:32px;border-radius:var(--radius-sm);font-size:1rem;}
+.modal-body{padding:1.25rem 1.5rem;}
+.modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);}
+.order-summary{background:var(--light);border-radius:var(--radius-sm);padding:0.85rem 1rem;margin-bottom:1rem;}
+.order-sum-title{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--gray);margin-bottom:0.5rem;}
+.order-sum-item{display:flex;justify-content:space-between;font-size:0.83rem;padding:0.2rem 0;}
+.order-sum-total{display:flex;justify-content:space-between;font-weight:800;font-size:0.9rem;color:var(--blue);padding-top:0.5rem;margin-top:0.5rem;border-top:1px solid var(--border);}
+.form-group{margin-bottom:0.85rem;}
+.form-group label{display:block;font-size:0.82rem;font-weight:600;margin-bottom:0.35rem;}
+.form-group input,.form-group textarea{width:100%;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:0.55rem 0.85rem;font-family:inherit;font-size:0.88rem;outline:none;resize:none;}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--blue);}
 </style>
 </head>
 <body>
@@ -240,11 +258,30 @@ footer{background:var(--dark);padding:3rem 5% 1.5rem;}
   <div class="cart-body" id="cartBody"><div class="empty-cart">Giỏ hàng trống</div></div>
   <div class="cart-footer" id="cartFooter" style="display:none">
     <div class="cart-total-row"><span>Tổng cộng</span><span id="cartTotal"></span></div>
-    <button class="btn-primary" style="width:100%;justify-content:center" onclick="alert('Tính năng đặt hàng đang phát triển!')">Đặt hàng ngay</button>
+    <button class="btn-primary" style="width:100%;justify-content:center" onclick="openOrderModal()">🛍️ Đặt hàng ngay</button>
     <a href="https://zalo.me/0338937472" target="_blank" class="btn-zalo">💬 Đặt qua Zalo — 0338 937 472</a>
   </div>
 </div>
 <div class="toast" id="toast"></div>
+
+<!-- ORDER MODAL -->
+<div class="modal-overlay" id="orderModal" onclick="closeOrderModal()">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-header"><h3>📋 Xác nhận đặt hàng</h3><button onclick="closeOrderModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="order-summary" id="orderSummary"></div>
+      <div class="form-group"><label>Họ và tên *</label><input type="text" id="orderName" placeholder="Nguyễn Văn A"></div>
+      <div class="form-group"><label>Số điện thoại *</label><input type="tel" id="orderPhone" placeholder="0xxxxxxxxx"></div>
+      <div class="form-group"><label>Địa chỉ giao hàng</label><input type="text" id="orderAddress" placeholder="Số nhà, đường, phường, quận, tỉnh/TP"></div>
+      <div class="form-group"><label>Ghi chú</label><textarea id="orderNote" rows="2" placeholder="Yêu cầu đặc biệt, thời gian giao hàng..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-primary" id="orderSubmitBtn" style="width:100%;justify-content:center" onclick="submitOrder()">✅ Xác nhận đặt hàng</button>
+      <a href="https://zalo.me/0338937472" target="_blank" class="btn-zalo" style="margin-top:0.5rem">💬 Hoặc đặt qua Zalo</a>
+    </div>
+  </div>
+</div>
+
 <a href="https://zalo.me/0338937472" class="zalo-float" target="_blank">💬</a>
 
 <script>
@@ -383,6 +420,49 @@ function openCart(){document.getElementById("overlay").classList.add("open");doc
 function closeCart(){document.getElementById("overlay").classList.remove("open");document.getElementById("cartPanel").classList.remove("open");}
 
 function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2800);}
+
+// ── ORDER ─────────────────────────────────────
+const APPS_SCRIPT_URL = "APPS_SCRIPT_URL_CUA_BAN";
+
+function openOrderModal() {
+  if (!cart.length) { showToast("⚠️ Giỏ hàng trống!"); return; }
+  document.getElementById("orderSummary").innerHTML = `
+    <div class="order-sum-title">Đơn hàng của bạn</div>
+    ${cart.map(i=>`<div class="order-sum-item"><span>${i.name} × ${i.qty}</span><span>${fmt(i.price*i.qty)}</span></div>`).join("")}
+    <div class="order-sum-total"><span>Tổng cộng</span><span>${fmt(cart.reduce((s,i)=>s+i.price*i.qty,0))}</span></div>`;
+  document.getElementById("orderModal").classList.add("open");
+}
+
+function closeOrderModal() { document.getElementById("orderModal").classList.remove("open"); }
+
+async function submitOrder() {
+  const name = document.getElementById("orderName").value.trim();
+  const phone = document.getElementById("orderPhone").value.trim();
+  if (!name) { alert("Vui lòng nhập họ tên!"); return; }
+  if (!phone) { alert("Vui lòng nhập số điện thoại!"); return; }
+  const order = {
+    orderId: "DH"+Date.now(), timestamp: new Date().toLocaleString("vi-VN"),
+    customer: { name, phone, address: document.getElementById("orderAddress").value.trim(), note: document.getElementById("orderNote").value.trim() },
+    items: cart.map(i=>({id:i.id, name:i.name, price:i.price, qty:i.qty, subtotal:i.price*i.qty})),
+    total: cart.reduce((s,i)=>s+i.price*i.qty,0), status:"Mới"
+  };
+  const btn = document.getElementById("orderSubmitBtn");
+  btn.disabled=true; btn.textContent="Đang gửi...";
+  try {
+    if (APPS_SCRIPT_URL !== "APPS_SCRIPT_URL_CUA_BAN") {
+      const res = await fetch(APPS_SCRIPT_URL, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({type:"order", data:order})});
+      const result = await res.json();
+      if (!result.success) throw new Error();
+    }
+    cart=[]; saveCart(); renderCartPanel(); closeCart(); closeOrderModal();
+    showToast(`✅ Đặt hàng thành công! Mã đơn: ${order.orderId}`);
+    ["orderName","orderPhone","orderAddress","orderNote"].forEach(id=>document.getElementById(id).value="");
+  } catch(e) {
+    alert("Có lỗi khi gửi đơn. Vui lòng đặt qua Zalo: 0338 937 472");
+  } finally {
+    btn.disabled=false; btn.textContent="✅ Xác nhận đặt hàng";
+  }
+}
 
 // ── INIT ──────────────────────────────────────
 (async()=>{
