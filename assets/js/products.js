@@ -8,45 +8,43 @@ class ProductManager {
     this.loaded = false;
   }
 
-  // Tải tất cả sản phẩm từ Google Sheets
   async loadAll() {
     const { spreadsheetId, apiKey, sheetNames } = CONFIG.sheets;
-    const all = [];
-
-    for (const sheet of sheetNames) {
+    const results = await Promise.all(sheetNames.map(async sheet => {
       try {
         const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${encodeURIComponent(sheet)}!A4:H500?key=${apiKey}`;
         const res = await fetch(url);
-        const data = await res.json();
-        if (!data.values) continue;
-
-        data.values.forEach(row => {
-          if (!row[0] || !row[1] || !row[2]) return; // bỏ hàng trống
-          const p = {
-            bigCategory: sheet,
-            category:      row[0] || "",
-            id:            row[1] || "",
-            name:          row[2] || "",
-            price:         parseInt((row[3]||"0").toString().replace(/[,. ]/g,"")) || 0,
-            originalPrice: parseInt((row[4]||"0").toString().replace(/[,. ]/g,"")) || 0,
-            description:   row[5] || "",
-            image:         row[6] ? CONFIG.imagePath + row[6] : CONFIG.defaultImage,
-            status:        (row[7] || "active").trim().toLowerCase()
-          };
-          if (p.status !== "inactive") all.push(p);
-        });
+        return { sheet, data: await res.json() };
       } catch(e) {
         console.warn(`Không tải được sheet: ${sheet}`, e);
+        return { sheet, data: {} };
       }
+    }));
+    const all = [];
+    for (const { sheet, data } of results) {
+      if (!data.values) continue;
+      data.values.forEach(row => {
+        if (!row[0] || !row[1] || !row[2]) return;
+        const p = {
+          bigCategory: sheet,
+          category:      row[0] || "",
+          id:            row[1] || "",
+          name:          row[2] || "",
+          price:         parseInt((row[3]||"0").toString().replace(/[,. ]/g,"")) || 0,
+          originalPrice: parseInt((row[4]||"0").toString().replace(/[,. ]/g,"")) || 0,
+          description:   row[5] || "",
+          image:         row[6] ? CONFIG.imagePath + row[6] : CONFIG.defaultImage,
+          status:        (row[7] || "active").trim().toLowerCase()
+        };
+        if (p.status !== "inactive") all.push(p);
+      });
     }
-
     this.products = all;
     this._buildCategories();
     this.loaded = true;
     return all;
   }
 
-  // Xây dựng cây danh mục từ dữ liệu
   _buildCategories() {
     this.categories = {};
     this.products.forEach(p => {
@@ -56,7 +54,6 @@ class ProductManager {
     });
   }
 
-  // Lọc sản phẩm theo điều kiện
   filter({ bigCategory, category, status, search, minPrice, maxPrice } = {}) {
     return this.products.filter(p => {
       if (bigCategory && p.bigCategory !== bigCategory) return false;
@@ -72,7 +69,6 @@ class ProductManager {
     });
   }
 
-  // Phân trang
   paginate(products, page = 1, perPage = CONFIG.productsPerPage) {
     const start = (page - 1) * perPage;
     return {
@@ -83,13 +79,11 @@ class ProductManager {
     };
   }
 
-  // Format giá
   formatPrice(n) {
     if (!n || n === 0) return "";
     return n.toLocaleString("vi-VN") + "₫";
   }
 
-  // Render 1 card sản phẩm
   renderCard(p) {
     const isSale = p.status === "sale" && p.originalPrice > 0;
     const discount = isSale ? Math.round((1 - p.price / p.originalPrice) * 100) : 0;

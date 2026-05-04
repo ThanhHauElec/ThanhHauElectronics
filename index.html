@@ -260,24 +260,29 @@ const CAT_ICONS = {"SmartHome":"🏠","SmartLight":"💡","SmartFarm":"🌿","Ca
 
 // ── LOAD PRODUCTS FROM GOOGLE SHEETS ────────
 async function loadProducts() {
-  const all = [];
-  for (const sheet of CONFIG.sheetNames) {
+  const results = await Promise.all(CONFIG.sheetNames.map(async sheet => {
     try {
       const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.spreadsheetId}/values/${encodeURIComponent(sheet)}!A4:H500?key=${CONFIG.apiKey}`;
       const res = await fetch(url);
-      const data = await res.json();
-      if (data.error) { console.warn(sheet, data.error.message); continue; }
-      if (!data.values) continue;
-      data.values.forEach(row => {
-        if (!row[0] || !row[1] || !row[2]) return;
-        all.push({
-          bigCat: sheet, category: row[0]||"", id: row[1]||"", name: row[2]||"",
-          price: parseInt((row[3]||"0").toString().replace(/\D/g,""))||0,
-          origPrice: parseInt((row[4]||"0").toString().replace(/\D/g,""))||0,
-          desc: row[5]||"", image: row[6]||"", status: (row[7]||"active").trim()
-        });
+      return { sheet, data: await res.json() };
+    } catch(e) {
+      console.warn("Lỗi tải sheet:", sheet, e);
+      return { sheet, data: {} };
+    }
+  }));
+  const all = [];
+  for (const { sheet, data } of results) {
+    if (data.error) { console.warn(sheet, data.error.message); continue; }
+    if (!data.values) continue;
+    data.values.forEach(row => {
+      if (!row[0] || !row[1] || !row[2]) return;
+      all.push({
+        bigCat: sheet, category: row[0]||"", id: row[1]||"", name: row[2]||"",
+        price: parseInt((row[3]||"0").toString().replace(/\D/g,""))||0,
+        origPrice: parseInt((row[4]||"0").toString().replace(/\D/g,""))||0,
+        desc: row[5]||"", image: row[6]||"", status: (row[7]||"active").trim()
       });
-    } catch(e) { console.warn("Lỗi tải sheet:", sheet, e); }
+    });
   }
   return all.filter(p => p.status !== "inactive");
 }
@@ -299,7 +304,9 @@ function renderCategories(products) {
 
 // ── RENDER FEATURED PRODUCTS ─────────────────
 function renderFeatured(products) {
-  const featured = [...products.filter(p=>p.status==="sale"), ...products.filter(p=>p.status!=="sale")].slice(0,8);
+  const sales = [], rest = [];
+  products.forEach(p => (p.status === "sale" ? sales : rest).push(p));
+  const featured = sales.concat(rest).slice(0, 8);
   if (!featured.length) {
     document.getElementById("featuredGrid").innerHTML = '<div class="error-msg">Chưa có sản phẩm nào. Hãy thêm vào Google Sheets!</div>';
     return;
@@ -335,7 +342,8 @@ let cart = JSON.parse(localStorage.getItem("th_cart")||"[]");
 
 function saveCart() {
   localStorage.setItem("th_cart", JSON.stringify(cart));
-  document.querySelectorAll("#cartBadge").forEach(b => b.textContent = cart.reduce((s,i)=>s+i.qty,0));
+  const badge = document.getElementById("cartBadge");
+  if (badge) badge.textContent = cart.reduce((s,i)=>s+i.qty,0);
 }
 
 function addToCart(p) {

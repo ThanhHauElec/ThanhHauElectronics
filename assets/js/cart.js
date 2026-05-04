@@ -51,7 +51,6 @@ class CartManager {
     setTimeout(() => t.classList.remove("show"), 2800);
   }
 
-  // Render giỏ hàng panel
   renderPanel() {
     const body = document.getElementById("cartBody");
     const footer = document.getElementById("cartFooter");

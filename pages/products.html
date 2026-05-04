@@ -237,26 +237,30 @@ let allProducts = [];
 let categories = {};
 
 async function loadProducts() {
-  const all = [];
-  for (const sheet of CONFIG.sheetNames) {
+  const results = await Promise.all(CONFIG.sheetNames.map(async sheet => {
     try {
       const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.spreadsheetId}/values/${encodeURIComponent(sheet)}!A4:H500?key=${CONFIG.apiKey}`;
       const res = await fetch(url);
-      const data = await res.json();
-      if (data.error || !data.values) continue;
-      data.values.forEach(row => {
-        if (!row[0]||!row[1]||!row[2]) return;
-        all.push({
-          bigCat: sheet, category: row[0]||"", id: row[1]||"", name: row[2]||"",
-          price: parseInt((row[3]||"0").toString().replace(/\D/g,""))||0,
-          origPrice: parseInt((row[4]||"0").toString().replace(/\D/g,""))||0,
-          desc: row[5]||"", image: row[6]||"", status: (row[7]||"active").trim()
-        });
+      return { sheet, data: await res.json() };
+    } catch(e) {
+      console.warn("Lỗi sheet:", sheet, e);
+      return { sheet, data: {} };
+    }
+  }));
+  const all = [];
+  for (const { sheet, data } of results) {
+    if (data.error || !data.values) continue;
+    data.values.forEach(row => {
+      if (!row[0]||!row[1]||!row[2]) return;
+      all.push({
+        bigCat: sheet, category: row[0]||"", id: row[1]||"", name: row[2]||"",
+        price: parseInt((row[3]||"0").toString().replace(/\D/g,""))||0,
+        origPrice: parseInt((row[4]||"0").toString().replace(/\D/g,""))||0,
+        desc: row[5]||"", image: row[6]||"", status: (row[7]||"active").trim()
       });
-    } catch(e) { console.warn("Lỗi sheet:", sheet, e); }
+    });
   }
   allProducts = all.filter(p => p.status !== "inactive");
-  // Build category tree
   categories = {};
   allProducts.forEach(p => {
     if (!categories[p.bigCat]) categories[p.bigCat] = {};
@@ -361,7 +365,6 @@ function applyFilters() {
     }).join("");
   }
 
-  // Pagination
   if (pages <= 1) { document.getElementById("pagination").innerHTML = ""; return; }
   let ph = "";
   for (let i=1; i<=pages; i++) ph += `<button class="${i===currentPage?'active':''}" onclick="currentPage=${i};applyFilters()">${i}</button>`;
@@ -373,7 +376,8 @@ let cart = JSON.parse(localStorage.getItem("th_cart")||"[]");
 
 function saveCart() {
   localStorage.setItem("th_cart", JSON.stringify(cart));
-  document.querySelectorAll("#cartBadge").forEach(b => b.textContent = cart.reduce((s,i)=>s+i.qty,0));
+  const badge = document.getElementById("cartBadge");
+  if (badge) badge.textContent = cart.reduce((s,i)=>s+i.qty,0);
 }
 
 function addToCart(p) {

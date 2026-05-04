@@ -7,7 +7,6 @@ const APPS_SCRIPT_URL = "APPS_SCRIPT_URL_CUA_BAN";
 
 class OrderManager {
 
-  // Gửi đơn hàng
   async submit(customerInfo) {
     if (!CART.items.length) {
       alert("Giỏ hàng trống!");
@@ -53,7 +52,6 @@ class OrderManager {
     return false;
   }
 
-  // Gửi thông tin khách hàng (form liên hệ)
   async submitContact(info) {
     try {
       await fetch(APPS_SCRIPT_URL, {
